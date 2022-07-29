@@ -4,6 +4,7 @@ import math
 import os
 import random
 import time
+import datetime
 from copy import deepcopy
 from pathlib import Path
 from threading import Thread
@@ -521,7 +522,7 @@ def train(hyp, opt, device, tb_writer=None):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', type=str, default='F:/yolov7-main/cy_v7/yolo7.pt', help='initial weights path')
+    parser.add_argument('--weights', type=str, default='F:/yolov7-main/cy_v7/yolov7.pt', help='initial weights path')
     parser.add_argument('--cfg', type=str, default='F:/yolov7-main/cy_v7/yolov7.yaml', help='model.yaml path')
     parser.add_argument('--data', type=str, default='F:/yolov7-main/cy_v7/coco.yaml', help='data.yaml path')
     parser.add_argument('--hyp', type=str, default='data/hyp.scratch.p5.yaml', help='hyperparameters path')
@@ -581,6 +582,7 @@ if __name__ == '__main__':
         assert len(opt.cfg) or len(opt.weights), 'either --cfg or --weights must be specified'
         opt.img_size.extend([opt.img_size[-1]] * (2 - len(opt.img_size)))  # extend to 2 sizes (train, test)
         opt.name = 'evolve' if opt.evolve else opt.name
+        opt.name = opt.name + '-' + datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         opt.save_dir = increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok | opt.evolve)  # increment run
 
     # DDP mode
